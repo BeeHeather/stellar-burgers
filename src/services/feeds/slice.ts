@@ -32,15 +32,11 @@ export const feedsSlice = createSlice({
     })
   },
   extraReducers: (builder) => {
-    builder
-      .addCase(getFeeds.fulfilled, (state, action) => {
-        state.orders = action.payload.orders;
-        state.total = action.payload.total;
-        state.totalToday = action.payload.totalToday;
-      })
-      .addCase(getFeeds.rejected, () => {
-        console.log('feeds error');
-      });
+    builder.addCase(getFeeds.fulfilled, (state, action) => {
+      state.orders = action.payload.orders;
+      state.total = action.payload.total;
+      state.totalToday = action.payload.totalToday;
+    });
   }
 });
 

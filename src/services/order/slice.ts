@@ -52,17 +52,10 @@ export const orderSlice = createSlice({
       })
       .addCase(createOrder.rejected, (state) => {
         state.orderRequest = false;
-        console.log('create order error');
       })
 
-      .addCase(getOrderByNumber.pending, () => {
-        console.log('loading order...');
-      })
       .addCase(getOrderByNumber.fulfilled, (state, action) => {
         state.currentOrder = action.payload.orders[0];
-      })
-      .addCase(getOrderByNumber.rejected, () => {
-        console.log('get order error');
       });
   }
 });
