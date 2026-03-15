@@ -85,8 +85,8 @@ const ModalOrderProfile = () => {
 
 export const AppContent = () => {
   const location = useLocation();
-  const state = location.state as { backgroundLocation?: Location };
-  const background = state?.backgroundLocation;
+  const state = location.state as { background?: Location };
+  const background = state?.background;
 
   const dispatch = useDispatch();
   const isAuthChecked = useSelector(selectIsAuthChecked);
@@ -152,22 +152,25 @@ export const AppContent = () => {
               </ProtectedRoute>
             }
           />
+          <Route path='ingredients/:id' element={<IngredientDetails />} />
           <Route path='*' element={<NotFound404 />} />
         </Route>
       </Routes>
 
-      <Routes location={location}>
-        <Route path='ingredients/:id' element={<ModalIngredient />} />
-        <Route path='feed/:number' element={<ModalOrderFeed />} />
-        <Route
-          path='profile/orders/:number'
-          element={
-            <ProtectedRoute>
-              <ModalOrderProfile />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
+      {background && (
+        <Routes location={location}>
+          <Route path='ingredients/:id' element={<ModalIngredient />} />
+          <Route path='feed/:number' element={<ModalOrderFeed />} />
+          <Route
+            path='profile/orders/:number'
+            element={
+              <ProtectedRoute>
+                <ModalOrderProfile />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      )}
     </>
   );
 };
