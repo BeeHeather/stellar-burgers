@@ -9,4 +9,3 @@ export type BurgerConstructorElementUIProps = {
   handleClose: () => void;
   onClick?: (ingredient: TConstructorIngredient) => void;
 };
-

@@ -1,14 +1,19 @@
 import { ProfileUI } from '@ui-pages';
-import { FC, SyntheticEvent, useEffect, useState } from 'react';
+import { FC, SyntheticEvent, useEffect } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
 import { updateUser, getUser } from '../../services/slices/userSlice';
 import { selectUser } from '../../services/slices/userSlice';
+import { useForm } from '../../hooks/useForm';
 
 export const Profile: FC = () => {
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
 
-  const [formValue, setFormValue] = useState({
+  const {
+    values: formValue,
+    handleChange,
+    setValues: setFormValue
+  } = useForm({
     name: user?.name || '',
     email: user?.email || '',
     password: ''
@@ -20,7 +25,7 @@ export const Profile: FC = () => {
       name: user?.name || '',
       email: user?.email || ''
     }));
-  }, [user]);
+  }, [user, setFormValue]);
 
   const isFormChanged =
     formValue.name !== user?.name ||
@@ -51,20 +56,13 @@ export const Profile: FC = () => {
     });
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormValue((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value
-    }));
-  };
-
   return (
     <ProfileUI
       formValue={formValue}
       isFormChanged={isFormChanged}
       handleCancel={handleCancel}
       handleSubmit={handleSubmit}
-      handleInputChange={handleInputChange}
+      handleInputChange={handleChange}
     />
   );
 };
