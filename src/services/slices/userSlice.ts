@@ -22,7 +22,7 @@ export interface UserState {
   error: string | null;
 }
 
-const initialState: UserState = {
+export const initialState: UserState = {
   user: null,
   isAuthenticated: false,
   isAuthChecked: false,

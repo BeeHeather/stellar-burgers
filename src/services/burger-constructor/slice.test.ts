@@ -4,7 +4,9 @@ import {
   burgerConstructorSlice,
   addIngredient,
   addBun,
+  addSauce,
   removeIngredient,
+  removeIngredientAtIndex,
   swapIngredients,
   clearConstructor,
   initialState
@@ -168,6 +170,104 @@ describe('burgerConstructor slice', () => {
 
       expect(state.bun).toBeNull();
       expect(state.ingredients.length).toBe(0);
+    });
+  });
+
+  describe('addSauce', () => {
+    it('Добавление соуса удаляет предыдущий соус и добавляет новый', () => {
+      const sauceMock: TIngredient = {
+        _id: '3',
+        name: 'Тестовый соус',
+        type: 'sauce',
+        proteins: 5,
+        fat: 10,
+        carbohydrates: 5,
+        calories: 50,
+        price: 30,
+        image: 'sauce.png',
+        image_large: 'sauce_large.png',
+        image_mobile: 'sauce_mobile.png'
+      };
+
+      const firstSauceAction = addSauce(sauceMock);
+      let state = burgerConstructorSlice.reducer(initialState, firstSauceAction);
+
+      expect(state.ingredients.length).toBe(1);
+      expect(state.ingredients[0]._id).toBe(sauceMock._id);
+      expect(state.ingredients[0]).toHaveProperty('id');
+
+      const newSauceMock = { ...sauceMock, _id: '4', name: 'Новый соус' };
+      const secondSauceAction = addSauce(newSauceMock);
+      state = burgerConstructorSlice.reducer(state, secondSauceAction);
+
+      expect(state.ingredients.length).toBe(1);
+      expect(state.ingredients[0]._id).toBe('4');
+      expect(state.ingredients[0].name).toBe('Новый соус');
+    });
+
+    it('Добавление соуса не затрагивает другие ингредиенты', () => {
+      const sauceMock: TIngredient = {
+        _id: '3',
+        name: 'Тестовый соус',
+        type: 'sauce',
+        proteins: 5,
+        fat: 10,
+        carbohydrates: 5,
+        calories: 50,
+        price: 30,
+        image: 'sauce.png',
+        image_large: 'sauce_large.png',
+        image_mobile: 'sauce_mobile.png'
+      };
+
+      const ingredientAction = addIngredient(ingredientMock);
+      let state = burgerConstructorSlice.reducer(initialState, ingredientAction);
+
+      const sauceAction = addSauce(sauceMock);
+      state = burgerConstructorSlice.reducer(state, sauceAction);
+
+      expect(state.ingredients.length).toBe(2);
+      expect(state.ingredients[0]._id).toBe(ingredientMock._id);
+      expect(state.ingredients[1].type).toBe('sauce');
+    });
+  });
+
+  describe('removeIngredientAtIndex', () => {
+    it('Удаление ингредиента по индексу', () => {
+      const firstAction = addIngredient({ ...ingredientMock, _id: 'first' });
+      let state = burgerConstructorSlice.reducer(initialState, firstAction);
+
+      const secondAction = addIngredient({ ...ingredientMock, _id: 'second' });
+      state = burgerConstructorSlice.reducer(state, secondAction);
+
+      const thirdAction = addIngredient({ ...ingredientMock, _id: 'third' });
+      state = burgerConstructorSlice.reducer(state, thirdAction);
+
+      expect(state.ingredients.length).toBe(3);
+
+      state = burgerConstructorSlice.reducer(
+        state,
+        removeIngredientAtIndex(1)
+      );
+
+      expect(state.ingredients.length).toBe(2);
+      expect(state.ingredients[0]._id).toBe('first');
+      expect(state.ingredients[1]._id).toBe('third');
+    });
+
+    it('Удаление ингредиента по индексу 0', () => {
+      const firstAction = addIngredient({ ...ingredientMock, _id: 'first' });
+      let state = burgerConstructorSlice.reducer(initialState, firstAction);
+
+      const secondAction = addIngredient({ ...ingredientMock, _id: 'second' });
+      state = burgerConstructorSlice.reducer(state, secondAction);
+
+      expect(state.ingredients.length).toBe(2);
+
+      state = burgerConstructorSlice.reducer(state, removeIngredientAtIndex(0));
+
+      expect(state.ingredients.length).toBe(1);
+      expect(state.ingredients[0]._id).toBe('second');
     });
   });
 });

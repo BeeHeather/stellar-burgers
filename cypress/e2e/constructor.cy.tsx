@@ -61,6 +61,14 @@ describe('Конструктор бургера', () => {
       cy.get(selectors.modalCloseButton).click();
       cy.get(selectors.modal).should('not.exist');
     });
+
+    it('Закрытие модального окна по клику на оверлей', () => {
+      cy.get(selectors.ingredientBun).click();
+      cy.get(selectors.modal).should('be.visible');
+
+      cy.get('[data-cy=modal-overlay]').click({ force: true });
+      cy.get(selectors.modal).should('not.exist');
+    });
   });
 
   describe('Создание заказа', () => {
@@ -96,10 +104,14 @@ describe('Конструктор бургера', () => {
       cy.wait('@createOrder');
 
       cy.get(selectors.modal).should('be.visible');
+      cy.get(selectors.modal).should('contain', orderResponse.order.number);
       cy.get(selectors.modalCloseButton).click();
       cy.get(selectors.modal).should('not.exist');
 
       cy.get(selectors.constructor).should('contain', 'Выберите булки');
+      cy.get(selectors.constructorIngredientsList)
+        .find(selectors.constructorItem)
+        .should('not.exist');
     });
   });
 });
