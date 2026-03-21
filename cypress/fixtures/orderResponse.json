@@ -1,0 +1,18 @@
+{
+  "success": true,
+  "name": "Order",
+  "order": {
+    "createdAt": "2026-03-19T03:37:46.453Z",
+    "updatedAt": "2026-03-19T03:42:46.594Z",
+    "_id": "67dc2f8f1a2b3c4d5e6f7a8b",
+    "status": "done",
+    "number": 103967,
+    "ingredients": [
+      "643d69a5c3f7b9001cfa093c",
+      "643d69a5c3f7b9001cfa093e",
+      "643d69a5c3f7b9001cfa0942",
+      "643d69a5c3f7b9001cfa093c"
+    ],
+    "name": "Краторный spicy бургер"
+  }
+}
